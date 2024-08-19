@@ -59,7 +59,7 @@ cat << "EOF"
 ╩ ╩└─┘└─┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘└─┘
 EOF
 
-sleep 4
+sleep 3
 
 # Selección de Window Manager
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
@@ -81,6 +81,8 @@ esac
 
 # Instalación de eww
 echo -e "${greenColour}\n\n[!]Installing eww${endColour}"
+sleep 3
+
 yay -S rust cargo
 git clone https://github.com/elkowar/eww
 cd eww
@@ -114,32 +116,27 @@ echo -e "${blueColour}[!]\n\nPicom time${endColour}"
 sleep 3
 
 yay -S hicolor-icon-theme libconfig libdbus libepoxy libev libgl pcre2 pixman xcb-util-image xcb-util-renderutil dbus python xorg-xprop xorg-xwininfo asciidoc git mesa meson ninja setconf uthash
-
 git clone https://github.com/FT-Labs/picom.git
 
 cd picom
 
 meson setup --buildtype=release build
-
 LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson setup --buildtype=release build
-
 ninja -C build install
-
+cd $back
 mkdir -p ~/.config/picom
-
 cp picom.conf ~/.config/picom/
 
-cd $back
 
 # Instalación de herramientas adicionales
 yay -S feh polybar focuswriter flameshot waybar
 
 # Instalación de Powerlevel10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
 # Root Powerlevel10k
-sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
+sudo sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
 
 #Fonts installing 
 
@@ -161,6 +158,7 @@ for font in "${fonts[@]}"; do
     rm "$tarFile"
 
     echo -e "${greenColour}$font extracted successfully!${endColour}"
+    sleep 3
 done
 
 }
@@ -184,7 +182,7 @@ cat << "EOF"
 
 EOF
 
-sleep 4
+sleep 3
 
 mkdir -p hackTools
 cd hackTools
@@ -202,10 +200,12 @@ LOG_FILE="error.data"
 
 for tool in "${tools[@]}"; do
     echo "Instalando $tool..."
+    sleep 3
     yay -S --noconfirm "$tool"
 
     if ! command -v "$tool" > /dev/null 2>&1; then
         echo "[!]Error: $tool can't be installed, added to the error.data log"
+        sleep 3
         echo "$tool is not installed" | tee -a "$LOG_FILE"
     fi
 done
@@ -237,7 +237,7 @@ cat << "EOF"
 
 EOF
 
-sleep 4
+sleep 3
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
@@ -260,7 +260,7 @@ cat << "EOF"
 
 EOF
 
-sleep 4
+sleep 3
 
 echo -e "${blueColour}\n\nInstalling Bspwm for you!${endColour}"
 
@@ -272,14 +272,23 @@ cd bspwm
 make
 sudo make install
 cd $back
-cd .config 
-mkdir bspwm
-mkdir sxhkd
+
+git clone https://github.com/baskerville/sxhkd.git
+cd /sxhkd
+make
+sudo make install
+
+cd ~/.config 
+mkdir -p bspwm
+mkdir -p sxhkd
 cd $back
+
+chmod +x bspwmrc
+chmod +x sxhkdrc
+
 cp bspwmrc ~/.config/bspwm
-cp sxhkdrc ~/.config/sxhkdr
-chmod +x ~/.config/bspwm/bspwmrc
-chmod +x ~/.config/bspwm/sxhkdr
+cp sxhkdrc ~/.config/sxhkd
+
 
 echo -e "${greenColour}\n\nConfiguración terminada!${endColour}"
 
@@ -294,6 +303,7 @@ function waylandEww(){
     chmod +x ./eww
     cd ~/archSetup
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
+    sleep 3
     cd $back
     
 }
@@ -304,6 +314,7 @@ function normalEww(){
     cd target/release
     chmod +x ./eww
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
+    sleep 3
     cd $back
     
 
