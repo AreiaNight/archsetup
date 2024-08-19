@@ -66,6 +66,22 @@ case $replay in
         ;;
 esac 
 
+cat << "EOF"   
+DONE!
+*  **
+ **  
+     
+     
+     
+     
+*    
+  ** 
+ *   
+    *
+    *
+
+EOF   
+
 function aesthetics (){
 
 cat << "EOF"                             
@@ -73,6 +89,8 @@ cat << "EOF"
 ╠═╣├┤ └─┐ │ ├─┤├┤  │ ││  └─┐
 ╩ ╩└─┘└─┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘└─┘
 EOF
+
+sleep 1
 
 # Selección de Window Manager
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
@@ -152,27 +170,83 @@ echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 # Root Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
 
+#Fonts installing 
+
+fonts=("Inconsolata.tar.xz" "Lekton.tar.xz" "Monofur.tar.xz" "NerdFontsSymbolsOnly.tar.xz" "VictorMono.tar.xz")
+
+for font in "${fonts[@]}"; do
+    echo -e "${greenColour}Extracting $font...${endColour}"
+
+    # Extraer .tar.xz para obtener el archivo .tar
+    tar -xf "$font"
+
+    # Obtener el nombre del archivo .tar
+    tarFile="${font%.xz}"
+
+    # Extraer el archivo .tar
+    tar -xf "$tarFile"
+
+    # Limpiar el archivo .tar
+    rm "$tarFile"
+
+    echo -e "${greenColour}$font extracted successfully!${endColour}"
+done
+
 }
 
 function toolsHack () {
 
 cat << "EOF"
 
-    //    / /                                                
-   //___ / /  ___      ___     / ___     ( )   __      ___   
-  / ___  /   //   ) ) //___) ) //\ \     / / //   ) ) //   ) )
- //    / /  //       //       //  \ \   / / //   / / //       
-//    / /  ((____   ((____   //    \ \ / / ((___( ( ((____    
+                                                                  
+@@@  @@@   @@@@@@    @@@@@@@  @@@  @@@  @@@  @@@  @@@   @@@@@@@@  
+@@@  @@@  @@@@@@@@  @@@@@@@@  @@@  @@@  @@@  @@@@ @@@  @@@@@@@@@  
+@@!  @@@  @@!  @@@  !@@       @@!  !@@  @@!  @@!@!@@@  !@@        
+!@!  @!@  !@!  @!@  !@!       !@!  @!!  !@!  !@!!@!@!  !@!        
+@!@!@!@!  @!@!@!@!  !@!       @!@@!@!   !!@  @!@ !!@!  !@! @!@!@  
+!!!@!!!!  !!!@!!!!  !!!       !!@!!!    !!!  !@!  !!!  !!! !!@!!  
+!!:  !!!  !!:  !!!  :!!       !!: :!!   !!:  !!:  !!!  :!!   !!:  
+:!:  !:!  :!:  !:!  :!:       :!:  !:!  :!:  :!:  !:!  :!:   !::  
+::   :::  ::   :::   ::: :::   ::  :::   ::   ::   ::   ::: ::::  
+ :   : :   :   : :   :: :: :   :   :::  :    ::    :    :: :: :   
+                                                                  
+
 EOF
 
-# Instalación de zap
-echo -e "${purpleColour}\n\nWe will install zap as main tool for now!"
-sudo apt-get install snapd
-sudo snap install zap
+sleep 1
 
-# Instalación de SQLMAP
-echo -e "${redColour}\n\nSQLMAP is the next one!${endColour}"
-git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+mkdir -p hackTools
+cd hackTools
+
+# Instalación de Black Arch y herramientas
+
+echo -e "\n\n${grayColour}Installing black arch over current distro${endColour}"
+curl -O https://blackarch.org/strap.sh
+echo 26849980b35a42e6e192c6d9ed8c46f0d6d06047 strap.sh | sha1sum -c
+chmod +x strap.sh
+sudo ./strap.sh
+
+tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz")
+LOG_FILE="error.data"
+
+for tool in "${tools[@]}"; do
+    echo "Instalando $tool..."
+    yay -S --noconfirm "$tool"
+
+    if ! command -v "$tool" > /dev/null 2>&1; then
+        echo "[!]Error: $tool can't be installed, added to the error.data log"
+        echo "$tool is not installed" | tee -a "$LOG_FILE"
+    fi
+done
+
+# Instalación de herramientas externas
+
+sudo git clone https://github.com/drwetter/testssl.sh.git
+sudo git clone https://github.com/hatRiot/clusterd
+go install github.com/projectdiscovery/katana/cmd/katana@latest
+sudo git clone https://github.com/21y4d/nmapAutomator
+
+cd $back
 
 }
 
@@ -190,6 +264,8 @@ cat << "EOF"
 
 
 EOF
+
+sleep 1
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
@@ -212,6 +288,8 @@ cat << "EOF"
 
 EOF
 
+sleep 1
+
 echo -e "${blueColour}\n\nInstalling Bspwm for you!${endColour}"
 
 yay -S bspwm sxhkd polybar dunst rofi thunar
@@ -221,15 +299,15 @@ git clone https://github.com/baskerville/bspwm.git
 cd bspwm
 make
 sudo make install
-cp -r examples ~/.config/bspwm
-cp -r examples/sxhkd ~/.config/
+cd $back
+cd .config 
+mkdir bspwm
+mkdir sxhkd
+cd $back
+cp bspwmrc ~/.config/bspwm
+cp sxhkdrc ~/.config/sxhkdr
 chmod +x ~/.config/bspwm/bspwmrc
-
-# Sxhkd Configuración
-
-yay -S sxhkd
-
-git clone https://github.com/lukeSmithxyz/voidrice
+chmod +x ~/.config/bspwm/sxhkdr
 
 echo -e "${greenColour}\n\nConfiguración terminada!${endColour}"
 
