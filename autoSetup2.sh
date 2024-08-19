@@ -104,12 +104,14 @@ esac
 # Instalación de Kitty
 if ! command -v kitty > /dev/null 2>&1; then
     echo -e "${greenColour}Installing a kitten!${endColour}"
+    sleep 3
     yay -S kitty
 fi
 
 # Instalación de Picom
 
 echo -e "${blueColour}[!]\n\nPicom time${endColour}"
+sleep 3
 
 yay -S hicolor-icon-theme libconfig libdbus libepoxy libev libgl pcre2 pixman xcb-util-image xcb-util-renderutil dbus python xorg-xprop xorg-xwininfo asciidoc git mesa meson ninja setconf uthash
 
