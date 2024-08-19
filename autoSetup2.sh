@@ -46,41 +46,10 @@ back=$(pwd)
 echo -e "${redColour}\n\n\[!]Updating system, please wait..."
 yay -Syu --noconfirm
 
-echo -e "What do you want to install first?"
+echo -e "${greenColour}What do you want to install first?${endColour}"
 echo -e "\n\t1) Aesthetics"
 echo -e "\n\t2) Tools"
 read replay
-
-case $replay in
-    1)
-        aesthetics
-        toolsHack
-        ;;
-    2)
-        toolsHack
-        aesthetics
-        ;;
-    *)
-        echo -e "${redColour}\nNon an option, sorry! Exiting!${endColour}"
-        exit 1
-        ;;
-esac 
-
-cat << "EOF"   
-DONE!
-*  **
- **  
-     
-     
-     
-     
-*    
-  ** 
- *   
-    *
-    *
-
-EOF   
 
 function aesthetics (){
 
@@ -90,7 +59,7 @@ cat << "EOF"
 ╩ ╩└─┘└─┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘└─┘
 EOF
 
-sleep 1
+sleep 4
 
 # Selección de Window Manager
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
@@ -213,7 +182,7 @@ cat << "EOF"
 
 EOF
 
-sleep 1
+sleep 4
 
 mkdir -p hackTools
 cd hackTools
@@ -250,6 +219,7 @@ cd $back
 
 }
 
+
 function awesomneInstaller (){
 
 cat << "EOF"
@@ -265,7 +235,7 @@ cat << "EOF"
 
 EOF
 
-sleep 1
+sleep 4
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
@@ -288,7 +258,7 @@ cat << "EOF"
 
 EOF
 
-sleep 1
+sleep 4
 
 echo -e "${blueColour}\n\nInstalling Bspwm for you!${endColour}"
 
@@ -314,3 +284,57 @@ echo -e "${greenColour}\n\nConfiguración terminada!${endColour}"
 cd $back
 
 }
+
+function waylandEww(){
+
+    cargo build --release --no-default-features --features=wayland
+    cd target/release
+    chmod +x ./eww
+    cd ~/archSetup
+    echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
+    cd $back
+    
+}
+
+function normalEww(){
+
+    cargo build --release --no-default-features --features x11
+    cd target/release
+    chmod +x ./eww
+    echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
+    cd $back
+    
+
+}
+
+
+case $replay in
+    1)
+        aesthetics
+        toolsHack
+        ;;
+    2)
+        toolsHack
+        aesthetics
+        ;;
+    *)
+        echo -e "${redColour}\nNon an option, sorry! Exiting!${endColour}"
+        exit 1
+        ;;
+esac 
+
+cat << "EOF"   
+DONE!
+*  **
+ **  
+     
+     
+     
+     
+*    
+  ** 
+ *   
+    *
+    *
+
+EOF   
