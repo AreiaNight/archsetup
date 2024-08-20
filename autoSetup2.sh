@@ -282,11 +282,16 @@ cat << "EOF"
 
 EOF
 
+echo -e "${blueColour}\n\nInstalling BSPWM for you!${endColour}"
 sleep 3
 
-chmod +x setup.sh
-./setup.py
-
+yay -S bspwm sxhkd
+cd ~/.config 
+mkdir bsmpwm 
+mkdir sxhkd
+cd $back 
+cp bspwmrc ${HOME}/.config/bspwm 
+cp sxhkdrc ${HOME}/.config/sxhkd
 
 }
 
@@ -329,19 +334,3 @@ case $replay in
         exit 1
         ;;
 esac 
-
-cat << "EOF"   
-DONE!
-*  **
- **  
-     
-     
-     
-     
-*    
-  ** 
- *   
-    *
-    *
-
-EOF   
