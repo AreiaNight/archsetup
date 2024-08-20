@@ -263,7 +263,8 @@ sleep 3
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
-yay -S awesome
+yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap
+mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/
 
 }
 
@@ -285,13 +286,25 @@ EOF
 echo -e "${blueColour}\n\nInstalling BSPWM for you!${endColour}"
 sleep 3
 
-yay -S bspwm sxhkd
-cd ~/.config 
-mkdir bsmpwm 
-mkdir sxhkd
+yay -S bspwm sxhkd xorg
+
+echo -e "${blueColour}Upgrading the perms${endColour}"
+
+chmod +x bspwmrc
+chmod +x sxhkdrc
+chmod +x bspwm_resize
+
+echo -e "${blueColour}Making files${endColour}"
+
+mkdir -p ~/.config/{bspwm,sxhkd}
+
+echo -e "${blueColour}Installing...${endColour}"
+install -Dm755 bspwmrc ~/.config/bspwm/
+install -Dm644 sxhkdrc ~/.config/sxhkd/
+
+echo -e "${blueColour}Done!${endColour}"
 cd $back 
-cp bspwmrc ${HOME}/.config/bspwm 
-cp sxhkdrc ${HOME}/.config/sxhkd
+
 
 }
 
