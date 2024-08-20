@@ -80,8 +80,9 @@ case $replay in
 esac
 
 npah=$(pwd)
-
-if [ "$npah" = ]
+if [ "$npah" != "$back" ]; then
+    cd "$back"
+fi
 
 # Instalación de eww
 echo -e "${greenColour}\n\n[!]Installing eww${endColour}"
@@ -107,6 +108,11 @@ case $replay in
         ;;
 esac
 
+npah=$(pwd)
+if [ "$npah" != "$back" ]; then
+    cd "$back"
+fi
+
 # Instalación de Kitty
 if ! command -v kitty > /dev/null 2>&1; then
     echo -e "${greenColour}Installing a kitten!${endColour}"
@@ -131,6 +137,11 @@ cd $back
 mkdir -p ~/.config/picom
 cp picom.conf ~/.config/picom/
 
+npah=$(pwd)
+
+if [ "$npah" != "$back" ]; then
+    cd "$back"
+fi
 
 # Instalación de herramientas adicionales
 yay -S feh polybar focuswriter flameshot waybar
@@ -165,7 +176,10 @@ for font in "${fonts[@]}"; do
     sleep 3
 done
 
-cd $back 
+npah=$(pwd)
+if [ "$npah" != "$back" ]; then
+    cd "$back"
+fi
 
 mv -r backgrounds ${HOME} 
 
