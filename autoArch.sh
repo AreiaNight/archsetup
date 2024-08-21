@@ -142,7 +142,7 @@ if [ "$npah" != "$back" ]; then
 fi
 
 # Instalación de herramientas adicionales
-yay -S feh polybar fastfetch focuswriter flameshot rofi waybar >/dev/null 2>&1
+yay -S feh polybar fastfetch focuswriter flameshot rofi waybar ranger >/dev/null 2>&1
 
 # Instalación de Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
@@ -157,25 +157,11 @@ cp .p10k.zhs /root
 
 #Fonts installing 
 
-fonts=("Inconsolata.tar.xz" "Lekton.tar.xz" "Monofur.tar.xz" "NerdFontsSymbolsOnly.tar.xz" "VictorMono.tar.xz")
+fonts=("ttf-space-mono-nerd" "ttf-monofur-nerd" "ttf-anonymouspro-nerd" "ttf-nerd-fonts-symbols-mono")
 
 for font in "${fonts[@]}"; do
-    echo -e "${greenColour}Extracting $font...${endColour}"
-
-    # Extraer .tar.xz para obtener el archivo .tar
-    tar -xf "$font" >/dev/null 2>&1
-
-    # Obtener el nombre del archivo .tar
-    tarFile="${font%.xz}" >/dev/null 2>&1
-
-    # Extraer el archivo .tar
-    tar -xf "$tarFile" >/dev/null 2>&1
-
-    # Limpiar el archivo .tar
-    rm "$tarFile" >/dev/null 2>&1
-
-    echo -e "${greenColour}$font extracted successfully!${endColour}"
-    sleep 3
+    yay -S $font >/dev/null 2>&1
+    echo "Instalando $font"
 done
 
 npah=$(pwd)
