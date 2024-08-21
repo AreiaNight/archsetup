@@ -37,14 +37,14 @@ trap ctrl_c SIGINT
 # Instalación de yay
 if ! command -v yay > /dev/null 2>&1; then
     echo -e "${greenColour}Installing yay${endColour}"
-    sudo pacman -S yay
+    sudo pacman -S yay > /dev/null 2>&1
 fi
 
 back=$(pwd)
 
 # Actualización del sistema
 echo -e "${redColour}\n\n\[!]Updating system, please wait..."
-yay -Syu --noconfirm
+yay -Syu --noconfirm > /dev/null 2>&1
 
 echo -e "${greenColour}What do you want to install first?${endColour}"
 echo -e "\n\t1) Aesthetics"
@@ -84,10 +84,10 @@ fi
 
 # Instalación de eww
 echo -e "${greenColour}\n\n[!]Installing eww${endColour}"
-sleep 3
+sleep 3 
 
 yay -S rust cargo
-git clone https://github.com/elkowar/eww
+git clone https://github.com/elkowar/eww > /dev/null 2>&1
 cd eww
 
 echo -e "${purpleColour}\n\nAre you using Wayland? (y/n)${endColour}"
@@ -115,7 +115,7 @@ fi
 if ! command -v kitty > /dev/null 2>&1; then
     echo -e "${greenColour}Installing a kitten!${endColour}"
     sleep 3
-    yay -S kitty
+    yay -S kitty > /dev/null 2>&1
 fi
 
 
@@ -124,7 +124,7 @@ if [ "$npah" != "$back" ]; then
 fi
 
 # Instalación de herramientas adicionales
-yay -S feh polybar focuswriter flameshot waybar
+yay -S feh polybar focuswriter flameshot waybar > /dev/null 2>&1
 
 # Instalación de Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
@@ -141,16 +141,16 @@ for font in "${fonts[@]}"; do
     echo -e "${greenColour}Extracting $font...${endColour}"
 
     # Extraer .tar.xz para obtener el archivo .tar
-    tar -xf "$font"
+    tar -xf "$font" > /dev/null 2>&1
 
     # Obtener el nombre del archivo .tar
-    tarFile="${font%.xz}"
+    tarFile="${font%.xz}" > /dev/null 2>&1> /dev/null 2>&1
 
     # Extraer el archivo .tar
-    tar -xf "$tarFile"
+    tar -xf "$tarFile" > /dev/null 2>&1
 
     # Limpiar el archivo .tar
-    rm "$tarFile"
+    rm "$tarFile" > /dev/null 2>&1
 
     echo -e "${greenColour}$font extracted successfully!${endColour}"
     sleep 3
@@ -162,7 +162,7 @@ if [ "$npah" != "$back" ]; then
 fi
 
 cp -r backgrounds ${HOME}
-cp -r polybar bin kitty ~/.config
+cp -r polybar bin kitty ~/.config 
 
 }
 
@@ -204,7 +204,7 @@ LOG_FILE="error.data"
 for tool in "${tools[@]}"; do
     echo "Instalando $tool..."
     sleep 3
-    yay -S --noconfirm "$tool"
+    yay -S --noconfirm "$tool" > /dev/null 2>&1
 
     if ! command -v "$tool" > /dev/null 2>&1; then
         echo "[!]Error: $tool can't be installed, added to the error.data log"
@@ -215,10 +215,10 @@ done
 
 # Instalación de herramientas externas
 
-sudo git clone https://github.com/drwetter/testssl.sh.git
-sudo git clone https://github.com/hatRiot/clusterd
-go install github.com/projectdiscovery/katana/cmd/katana@latest
-sudo git clone https://github.com/21y4d/nmapAutomator
+sudo git clone https://github.com/drwetter/testssl.sh.git > /dev/null 2>&1
+sudo git clone https://github.com/hatRiot/clusterd > /dev/null 2>&1
+go install github.com/projectdiscovery/katana/cmd/katana@latest > /dev/null 2>&1
+sudo git clone https://github.com/21y4d/nmapAutomator > /dev/null 2>&1
 
 cd $back
 
@@ -247,9 +247,9 @@ echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 echo -e "${redColour}\n\nWARNING!${endColour}"
 echo -e "${redColour}\n\nThis is only the base version, no configurations included!!${endColour}"
 sleep 3
-
-yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap
-mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/
+ 
+yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap > /dev/null 2>&1
+mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/ 
 
 }
 
@@ -273,7 +273,7 @@ sleep 3
 
 yay -S bspwm sxhkd picom-ibhagwan-git calcurse todotxt \
        jq dunst betterlockscreen brightnessctl playerctl maim \
-       xclip imagemagick
+       xclip imagemagick > /dev/null 2>&1
 
 echo -e "${blueColour}Installing...${endColour}"
 
@@ -299,9 +299,9 @@ cd $back
 
 function waylandEww(){
 
-    cargo build --release --no-default-features --features=wayland
+    cargo build --release --no-default-features --features=wayland > /dev/null 2>&1
     cd target/release
-    chmod +x ./eww
+    chmod +x ./eww 
     cd ~/archSetup
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
     sleep 3
@@ -311,7 +311,7 @@ function waylandEww(){
 
 function normalEww(){
 
-    cargo build --release --no-default-features --features x11
+    cargo build --release --no-default-features --features x11 > /dev/null 2>&1
     cd target/release
     chmod +x ./eww
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
