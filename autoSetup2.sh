@@ -63,6 +63,13 @@ EOF
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
 read replay
 
+if ! command -v ifconfig >/dev/null 2>&1; then 
+
+    yay -S net-tools
+
+fi
+
+
 # Casos para la selección del Window Manager
 case $replay in
     1)
@@ -112,19 +119,30 @@ if [ "$npah" != "$back" ]; then
 fi
 
 # Instalación de Kitty
-if ! command -v kitty > /dev/null 2>&1; then
+if ! command -v kitty >/dev/null 2>&1; then
     echo -e "${greenColour}Installing a kitten!${endColour}"
     sleep 3
-    yay -S kitty > /dev/null 2>&1
+    yay -S kitty >/dev/null 2>&1
 fi
 
+#Installing picom
+
+yay -S picom >/dev/null 2>&1
+cd picom-jonaburg-fix
+meson --buildtype=release . build >/dev/null 2>&1
+ninja -C build >/dev/null 2>&1
+LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson --buildtype=release . build >/dev/null 2>&1
+# To install the binaries in /usr/local/bin (optional)
+sudo ninja -C build install >/dev/null 2>&1
+mkdir -p $HOME/.config/picom
+cp picom.conf ~/.config/picom
 
 if [ "$npah" != "$back" ]; then
     cd "$back"
 fi
 
 # Instalación de herramientas adicionales
-yay -S feh polybar focuswriter flameshot waybar > /dev/null 2>&1
+yay -S feh polybar focuswriter flameshot rofi waybar >/dev/null 2>&1
 
 # Instalación de Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
@@ -141,16 +159,16 @@ for font in "${fonts[@]}"; do
     echo -e "${greenColour}Extracting $font...${endColour}"
 
     # Extraer .tar.xz para obtener el archivo .tar
-    tar -xf "$font" > /dev/null 2>&1
+    tar -xf "$font" >/dev/null 2>&1
 
     # Obtener el nombre del archivo .tar
-    tarFile="${font%.xz}" > /dev/null 2>&1> /dev/null 2>&1
+    tarFile="${font%.xz}" >/dev/null 2>&1
 
     # Extraer el archivo .tar
-    tar -xf "$tarFile" > /dev/null 2>&1
+    tar -xf "$tarFile" >/dev/null 2>&1
 
     # Limpiar el archivo .tar
-    rm "$tarFile" > /dev/null 2>&1
+    rm "$tarFile" >/dev/null 2>&1
 
     echo -e "${greenColour}$font extracted successfully!${endColour}"
     sleep 3
@@ -193,10 +211,10 @@ cd hackTools
 # Instalación de Black Arch y herramientas
 
 echo -e "\n\n${grayColour}Installing black arch over current distro${endColour}"
-curl -O https://blackarch.org/strap.sh
-echo 26849980b35a42e6e192c6d9ed8c46f0d6d06047 strap.sh | sha1sum -c
+curl -O https://blackarch.org/strap.sh >/dev/null 2>&1
+echo 26849980b35a42e6e192c6d9ed8c46f0d6d06047 strap.sh | sha1sum -c >/dev/null 2>&1
 chmod +x strap.sh
-sudo ./strap.sh
+sudo ./strap.sh >/dev/null 2>&1
 
 tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz")
 LOG_FILE="error.data"
@@ -204,9 +222,9 @@ LOG_FILE="error.data"
 for tool in "${tools[@]}"; do
     echo "Instalando $tool..."
     sleep 3
-    yay -S --noconfirm "$tool" > /dev/null 2>&1
+    yay -S --noconfirm "$tool" >/dev/null 2>&1
 
-    if ! command -v "$tool" > /dev/null 2>&1; then
+    if ! command -v "$tool" >/dev/null 2>&1; then
         echo "[!]Error: $tool can't be installed, added to the error.data log"
         sleep 3
         echo "$tool is not installed" | tee -a "$LOG_FILE"
@@ -215,10 +233,10 @@ done
 
 # Instalación de herramientas externas
 
-sudo git clone https://github.com/drwetter/testssl.sh.git > /dev/null 2>&1
-sudo git clone https://github.com/hatRiot/clusterd > /dev/null 2>&1
+sudo git clone https://github.com/drwetter/testssl.sh.git >/dev/null 2>&1
+sudo git clone https://github.com/hatRiot/clusterd >/dev/null 2>&1
 go install github.com/projectdiscovery/katana/cmd/katana@latest > /dev/null 2>&1
-sudo git clone https://github.com/21y4d/nmapAutomator > /dev/null 2>&1
+sudo git clone https://github.com/21y4d/nmapAutomator >/dev/null 2>&1
 
 cd $back
 
@@ -248,7 +266,7 @@ echo -e "${redColour}\n\nWARNING!${endColour}"
 echo -e "${redColour}\n\nThis is only the base version, no configurations included!!${endColour}"
 sleep 3
  
-yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap > /dev/null 2>&1
+yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap >/dev/null 2>&1
 mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/ 
 
 }
@@ -271,9 +289,9 @@ EOF
 echo -e "${blueColour}\n\nInstalling BSPWM for you!${endColour}"
 sleep 3
 
-yay -S bspwm sxhkd picom-ibhagwan-git calcurse todotxt \
+yay -S bspwm sxhkd calcurse todotxt \
        jq dunst betterlockscreen brightnessctl playerctl maim \
-       xclip imagemagick > /dev/null 2>&1
+       xclip imagemagick >/dev/null 2>&1
 
 echo -e "${blueColour}Installing...${endColour}"
 
@@ -301,8 +319,7 @@ function waylandEww(){
 
     cargo build --release --no-default-features --features=wayland > /dev/null 2>&1
     cd target/release
-    chmod +x ./eww 
-    cd ~/archSetup
+    chmod +x ./eww
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
     sleep 3
     cd $back

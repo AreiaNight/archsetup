@@ -80,7 +80,7 @@ bspc config focus_follows_pointer true
 picom --config $HOME/.config/picom/picom.conf &
 
 # Start X wallpaper.
-feh --no-fehbg --bg-fill $HOME/backgrounds/aphrodite2.jpg 
+feh --no-fehbg --bg-fill ~/backgrounds/aphrodite.png 
 
 # Fix cursor.
 xsetroot -cursor_name left_ptr 
