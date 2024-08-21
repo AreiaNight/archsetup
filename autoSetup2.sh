@@ -59,8 +59,6 @@ cat << "EOF"
 ╩ ╩└─┘└─┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘└─┘
 EOF
 
-sleep 3
-
 # Selección de Window Manager
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
 read replay
@@ -163,7 +161,8 @@ if [ "$npah" != "$back" ]; then
     cd "$back"
 fi
 
-mv -r backgrounds ${HOME} 
+cp -r backgrounds ${HOME}
+cp -r polybar bin kitty ~/.config
 
 }
 
@@ -245,6 +244,10 @@ sleep 3
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
+echo -e "${redColour}\n\nWARNING!${endColour}"
+echo -e "${redColour}\n\nThis is only the base version, no configurations included!!${endColour}"
+sleep 3
+
 yay -S awesome vicious xcompmgr feh lxappearance xorg-setxkbmap
 mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/
 
@@ -275,14 +278,19 @@ yay -S bspwm sxhkd picom-ibhagwan-git calcurse todotxt \
 echo -e "${blueColour}Installing...${endColour}"
 
 mkdir -p $HOME/.config/bspwm 
-mkdir -p $HOME/.config/sxhkd 
+mkdir -p $HOME/.config/sxhkd
+mkdir -p $HOME/.config/bspwm/scripts
 
 chmod +x bspwmrc 
 chmod +x sxhkdrc
+chmod +x bspwm_resize
 
 cp bspwmrc ~/.config/bspwm/
 cp sxhkdrc ~/.config/sxhkd/
+cp bspwm_resize ~/.config/sxhkd/scripts
 
+cd ~/.config/bspwm 
+sed -i -e 's/\r$//' bspwmrc
 echo -e "${blueColour}Done!${endColour}"
 cd $back 
 
