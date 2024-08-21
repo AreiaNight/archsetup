@@ -142,14 +142,18 @@ if [ "$npah" != "$back" ]; then
 fi
 
 # Instalación de herramientas adicionales
-yay -S feh polybar focuswriter flameshot rofi waybar >/dev/null 2>&1
+yay -S feh polybar fastfetch focuswriter flameshot rofi waybar >/dev/null 2>&1
 
 # Instalación de Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+chsh -s $(which zsh)
+cp .p10k.zhs ~/
 
 # Root Powerlevel10k
 sudo sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
+chsh -s $(which zsh)
+cp .p10k.zhs /root
 
 #Fonts installing 
 
@@ -180,7 +184,11 @@ if [ "$npah" != "$back" ]; then
 fi
 
 cp -r backgrounds ${HOME}
-cp -r polybar bin kitty ~/.config 
+cp -r polybar bin kitty fastfetch~/.config 
+mkdir -p $HOME/.config/fastfetch
+cp -r backgrounds ~/
+
+cd $back
 
 }
 
@@ -353,3 +361,6 @@ case $replay in
         exit 1
         ;;
 esac 
+
+
+
