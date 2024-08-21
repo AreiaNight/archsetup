@@ -7,12 +7,25 @@
 ################################
 
 # ##############################################################################
-# #                                  ENV VARS                                  # 
+# #                          ENV VARS BY RXYHN                                 # 
 # ##############################################################################
 
 ## Environments
 export PATH="${PATH}:${HOME}/.config/bspwm/bin"
 
+# Parse colors from "~/.Xresources"
+xrdb -override "${HOME}/.Xresources"
+
+xrdb_query()
+{
+    [ -n "$XRDB_QUERY" ] || XRDB_QUERY="$(xrdb -query)"
+
+    echo "$XRDB_QUERY" | while IFS=';' read -r STRING; do
+        [ "${1}" = "${STRING%%\	*}" ] || continue
+        echo "${STRING##*\	}"
+        break
+    done
+}
 
 # ##############################################################################
 # #                             GENERAL SETTINGS                               #

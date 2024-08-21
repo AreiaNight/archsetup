@@ -120,24 +120,6 @@ if ! command -v kitty > /dev/null 2>&1; then
     yay -S kitty
 fi
 
-# Instalación de Picom
-
-echo -e "${blueColour}[!]\n\nPicom time${endColour}"
-sleep 3
-
-yay -S hicolor-icon-theme libconfig libdbus libepoxy libev libgl pcre2 pixman xcb-util-image xcb-util-renderutil dbus python xorg-xprop xorg-xwininfo asciidoc git mesa meson ninja setconf uthash
-git clone https://github.com/FT-Labs/picom.git
-
-cd picom
-
-meson setup --buildtype=release build
-LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson setup --buildtype=release build
-ninja -C build install
-cd $back
-mkdir -p ~/.config/picom
-cp picom.conf ~/.config/picom/
-
-npah=$(pwd)
 
 if [ "$npah" != "$back" ]; then
     cd "$back"
@@ -286,21 +268,20 @@ EOF
 echo -e "${blueColour}\n\nInstalling BSPWM for you!${endColour}"
 sleep 3
 
-yay -S bspwm sxhkd xorg
-
-echo -e "${blueColour}Upgrading the perms${endColour}"
-
-chmod +x bspwmrc
-chmod +x sxhkdrc
-chmod +x bspwm_resize
-
-echo -e "${blueColour}Making files${endColour}"
-
-mkdir -p ~/.config/{bspwm,sxhkd}
+yay -S bspwm sxhkd picom-ibhagwan-git calcurse todotxt \
+       jq dunst betterlockscreen brightnessctl playerctl maim \
+       xclip imagemagick
 
 echo -e "${blueColour}Installing...${endColour}"
-install -Dm755 bspwmrc ~/.config/bspwm/
-install -Dm644 sxhkdrc ~/.config/sxhkd/
+
+mkdir -p $HOME/.config/bspwm 
+mkdir -p $HOME/.config/sxhkd 
+
+chmod +x bspwmrc 
+chmod +x sxhkdrc
+
+cp bspwmrc ~/.config/bspwm/
+cp sxhkdrc ~/.config/sxhkd/
 
 echo -e "${blueColour}Done!${endColour}"
 cd $back 
