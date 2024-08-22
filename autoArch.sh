@@ -151,6 +151,7 @@ LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson --buildtype=r
 # To install the binaries in /usr/local/bin (optional)
 sudo ninja -C --noconfirm build install >/dev/null 2>&1
 mkdir -p $HOME/.config/picom
+cd $back
 cp picom.conf ~/.config/picom
 
 if [ "$npah" != "$back" ]; then
