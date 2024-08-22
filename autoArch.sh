@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Colores
-greenColour="\e[0;32m\033[1m"
+greenColour="\x1b[38;5;159m"
 endColour="\033[0m\e[0m"
-redColour="\e[0;31m\033[1m"
+redColour="\x1b[38;5;131m"
 blueColour="\e[0;34m\033[1m"
 yellowColour="\e[0;33m\033[1m"
 purpleColour="\e[0;35m\033[1m"
-turquoiseColour="\e[0;36m\033[1m"
-grayColour="\e[0;37m\033[1m"
+turquoiseColour="\x1b[38;5;115m"
+grayColour="\x1b[38;5;7m"
 
 cat << "EOF"
 ▄▄▄       ██▀███  ▓█████  ██▓ ▄▄▄       ███▄    █  ██▓  ▄████  ██░ ██ ▄▄▄█████▓
@@ -34,40 +34,21 @@ function ctrl_c(){
 # Capturar Ctrl+C
 trap ctrl_c SIGINT
 
-# Progress bar
-
-function ProgressBar {
-    local steps=7
-    local current_step=$1
-    local progress=$((current_step * 100 / steps))
-    local completed=$((progress / 2))
-    local remaining=$((50 - completed))
-
-    echo -ne "["
-    for ((i=0; i<completed; i++)); do echo -ne "x"; done
-    for ((i=0; i<remaining; i++)); do echo -ne "#"; done
-    echo -ne "] $progress% (Step $current_step/$steps)\r"
-
-    if [ "$progress" -eq 100 ]; then
-        echo -ne '\n'
-    fi
-}
 
 
 # Actualización del sistema
 echo -e "${redColour}\n\n[!]Updating system, please wait... This will taka a while so why not go for a snack or pet your pets?"
-sudo pacman -Syu --noconfirm
+sudo pacman -Syu --noconfirm > /dev/null 2>&1
 
 
 # Instalación de yay
 if ! command -v yay > /dev/null 2>&1; then
     echo -e "${greenColour}Installing yay${endColour}"
-    ProgressBar 2
     sudo pacman -S --noconfirm yay > /dev/null 2>&1
 fi
 
 back=$(pwd)
-ProgressBar 1
+
 
 echo -e "${greenColour}What do you want to install first?${endColour}"
 echo -e "\n\t1) Aesthetics"
@@ -153,7 +134,10 @@ fi
 
 #Installing picom
 
+echo -e "${purpleColour}\n\nInstalling picom!${endColour}"
+
 yay -S --noconfirm picom >/dev/null 2>&1
+git clone https://github.com/Arian8j2/picom-jonaburg-fix.git
 cd picom-jonaburg-fix
 meson --buildtype=release . build >/dev/null 2>&1
 ninja -C --noconfirm build >/dev/null 2>&1
@@ -167,19 +151,31 @@ if [ "$npah" != "$back" ]; then
     cd "$back"
 fi
 
+
 # Instalación de herramientas adicionales
-yay -S --noconfirm feh polybar fastfetch focuswriter flameshot rofi waybar ranger >/dev/null 2>&1
+packs=("feh" "polybar" "fastfetch" "focuswriter" "flameshot" "rofi" "ranger")
+LOG_FILE="errorAesthetics.data"
+
+for pack in "${packs[@]}"; do
+    echo "Installing $pack..."
+    yay -S --noconfirm "$pack" >/dev/null 2>&1
+
+    if ! command -v "${greenColour}$pack${endColour}" >/dev/null 2>&1; then
+        echo "${redColour}$pack is not installed${endColour}" | tee -a "$LOG_FILE"
+    fi
+    echo "${greenColour}$pack is installed${endColour}"
+done
 
 # Instalación de Powerlevel10k
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 chsh -s $(which zsh)
-cp .p10k.zhs ~/
+cp .p10k.zsh ~/
 
 # Root Powerlevel10k
 sudo sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
 chsh -s $(which zsh)
-cp .p10k.zhs /root
+cp .p10k.zsh /root
 
 #Fonts installing 
 
@@ -199,13 +195,12 @@ if [ "$npah" != "$back" ]; then
 fi
 
 cp -r backgrounds ${HOME}
-cp -r polybar bin kitty fastfetch~/.config 
 mkdir -p $HOME/.config/fastfetch
+cp -r polybar bin kitty fastfetch ~/.config 
 cp -r backgrounds ~/
 
 cd $back
 
-ProgressBar 3
 
 }
 
@@ -248,11 +243,11 @@ for tool in "${tools[@]}"; do
     sleep 3
     yay -S --noconfirm "$tool" >/dev/null 2>&1
 
-    if ! command -v "${greenColour}$tool${endColour}" >/dev/null 2>&1; then
-        echo "[!]Error: $tool can't be installed, added to the error.data log"
-        sleep 3
-        echo "${redColour}$tool is not installed${endColour}" | tee -a "$LOG_FILE"
+    if ! command -v  "$tool" >/dev/null 2>&1; then
+           echo -e "${redColour}$tool is not installed${endColour}" | tee -a "$LOG_FILE"
     fi
+    echo -e "${turquoiseColour}$tool is installed${endColour}"
+    
 done
 
 # Instalación de herramientas externas
@@ -268,7 +263,6 @@ echo -e "Installing nmapAutomator\n"
 
 cd $back
 
-ProgressBar 2
 
 }
 
@@ -301,7 +295,6 @@ sleep 3
 yay -S --noconfirm awesome vicious xcompmgr feh lxappearance xorg-setxkbmap >/dev/null 2>&1
 mkdir ~/.config/awesome && cp /etc/xdg/awesome/rc.lua ~/.config/awesome/ 
 
-ProgressBar 5
 
 }
 
@@ -323,7 +316,6 @@ EOF
 
 
 echo -e "${blueColour}\n\nInstalling BSPWM for you!${endColour}"
-sleep 3
 
 yay -S --noconfirm bspwm sxhkd calcurse todotxt \
        jq dunst betterlockscreen brightnessctl playerctl maim \
@@ -335,6 +327,7 @@ mkdir -p $HOME/.config/bspwm
 mkdir -p $HOME/.config/sxhkd
 mkdir -p $HOME/.config/bspwm/scripts
 
+echo -e "${blueColour}\nAlmost there!${endColour}"
 chmod +x bspwmrc 
 chmod +x sxhkdrc
 chmod +x bspwm_resize
@@ -343,39 +336,41 @@ cp bspwmrc ~/.config/bspwm/
 cp sxhkdrc ~/.config/sxhkd/
 cp bspwm_resize ~/.config/sxhkd/scripts
 
+echo -e "${blueColour}\nJust a little longer!${endColour}"
 cd ~/.config/bspwm 
 sed -i -e 's/\r$//' bspwmrc
 echo -e "${blueColour}Done!${endColour}"
 cd $back 
 
-ProgressBar 5
+
 
 }
 
 function waylandEww(){
 
-    
+    echo -e "${blueColour}\n\nBuilding eww! This will take sometime tho, want to go and walk a bit?${endColour}"
     cargo build --release --no-default-features --features=wayland >/dev/null 2>&1
     cd target/release
-    chmod +x ./eww
+    chmod +x eww
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
     sleep 3
     cd $back
     
-    ProgressBar 6
+
     
 }
 
 function normalEww(){
     
     
+    echo -e "${blueColour}\n\nBuilding eww! This will take sometime tho, want to go and walk a bit?${endColour}"
     cargo build --release --no-default-features --features x11 >/dev/null 2>&1
     cd target/release
-    chmod +x ./eww
+    chmod +x eww
     echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
     sleep 3
     cd $back
-    ProgressBar 6
+   
 
 }
 
@@ -397,5 +392,5 @@ esac
 
 echo -e "${greenColour}Done!${endColour}"
 
-ProgressBar 7
+
 
