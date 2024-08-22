@@ -64,6 +64,12 @@ cat << "EOF"
 EOF
 
 
+cd polybar 
+cd chmod +x launch.sh
+cd ..
+cd bin 
+chmod +x aphrodite.sh ethernet_status.sh htb_status.sh htb_target.sh
+cd ..
 
 # Selección de Window Manager
 echo -e "${purpleColour}\n\n[!]Choose your window manager!${endColour}\n\n\t${greenColour}1) Awesome${endColour}\n\t${blueColour}2) Bspwm${endColour}"
@@ -154,16 +160,17 @@ fi
 
 # Instalación de herramientas adicionales
 packs=("feh" "polybar" "fastfetch" "focuswriter" "flameshot" "rofi" "ranger")
+
 LOG_FILE="errorAesthetics.data"
 
 for pack in "${packs[@]}"; do
-    echo "Installing $pack..."
-    yay -S --noconfirm "$pack" >/dev/null 2>&1
 
-    if ! command -v "${greenColour}$pack${endColour}" >/dev/null 2>&1; then
-        echo "${redColour}$pack is not installed${endColour}" | tee -a "$LOG_FILE"
-    fi
+    echo "Installing $pack..."
+    
+    yay -S --noconfirm "$pack" >/dev/null 2>&1
+    
     echo "${greenColour}$pack is installed${endColour}"
+    
 done
 
 # Instalación de Powerlevel10k
@@ -175,7 +182,6 @@ cp .p10k.zsh ~/
 # Root Powerlevel10k
 sudo sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
 chsh -s $(which zsh)
-cp .p10k.zsh /root
 
 #Fonts installing 
 
@@ -240,14 +246,16 @@ LOG_FILE="error.data"
 
 for tool in "${tools[@]}"; do
     echo "Installing $tool..."
-    sleep 3
+
+    # Intenta instalar la herramienta
     yay -S --noconfirm "$tool" >/dev/null 2>&1
 
-    if ! command -v  "$tool" >/dev/null 2>&1; then
-           echo -e "${redColour}$tool is not installed${endColour}" | tee -a "$LOG_FILE"
+    # Verifica si la herramienta fue instalada correctamente
+    if command -v "$tool" >/dev/null 2>&1; then
+        echo -e "${turquoiseColour} $tool is installed${endColour}"
+    else
+        echo -e "${redColour} $tool is not installed${endColour}" | tee -a "$LOG_FILE"
     fi
-    echo -e "${turquoiseColour}$tool is installed${endColour}"
-    
 done
 
 # Instalación de herramientas externas
@@ -281,10 +289,6 @@ cat << "EOF"
 
 
 EOF
-
-
-
-sleep 3
 
 echo -e "${blueColour}\n\nInstalling AwesomeWM for you!${endColour}"
 
