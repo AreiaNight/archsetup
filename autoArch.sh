@@ -242,7 +242,7 @@ echo 26849980b35a42e6e192c6d9ed8c46f0d6d06047 strap.sh | sha1sum -c >/dev/null 2
 chmod +x strap.sh
 sudo ./strap.sh >/dev/null 2>&1
 
-tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz")
+tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz" "seclists")
 LOG_FILE="error.data"
 
 for tool in "${tools[@]}"; do
@@ -339,7 +339,7 @@ chmod +x bspwm_resize
 
 cp bspwmrc ~/.config/bspwm/
 cp sxhkdrc ~/.config/sxhkd/
-cp bspwm_resize ~/.config/sxhkd/scripts
+cp bspwm_resize ~/.config/bspwm/scripts
 
 echo -e "${blueColour}\nJust a little longer!${endColour}"
 cd ~/.config/bspwm 
