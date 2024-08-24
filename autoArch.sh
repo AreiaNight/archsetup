@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # Colores
-greenColour="\x1b[38;5;159m"
+greenColour="\e[0;32m\033[1m"
 endColour="\033[0m\e[0m"
-redColour="\x1b[38;5;131m"
+redColour="\e[0;31m\033[1m"
 blueColour="\e[0;34m\033[1m"
 yellowColour="\e[0;33m\033[1m"
 purpleColour="\e[0;35m\033[1m"
-turquoiseColour="\x1b[38;5;115m"
-grayColour="\x1b[38;5;7m"
+turquoiseColour="\e[0;36m\033[1m"
+grayColour="\e[0;37m\033[1m"
+
 
 cat << "EOF"
 ▄▄▄       ██▀███  ▓█████  ██▓ ▄▄▄       ███▄    █  ██▓  ▄████  ██░ ██ ▄▄▄█████▓
@@ -160,7 +161,7 @@ fi
 
 
 # Instalación de herramientas adicionales
-packs=("feh" "polybar" "fastfetch" "focuswriter" "flameshot" "rofi" "ranger")
+packs=("feh" "polybar" "fastfetch" "ghostwriter" "flameshot" "rofi" "ranger")
 
 LOG_FILE="errorAesthetics.data"
 
@@ -243,6 +244,7 @@ chmod +x strap.sh
 sudo ./strap.sh >/dev/null 2>&1
 
 tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz" "seclists")
+
 LOG_FILE="error.data"
 
 for tool in "${tools[@]}"; do
@@ -269,6 +271,24 @@ go install github.com/projectdiscovery/katana/cmd/katana@latest > /dev/null 2>&1
 echo -e "Installing Katana\n"
 sudo git clone https://github.com/21y4d/nmapAutomator >/dev/null 2>&1
 echo -e "Installing nmapAutomator\n"
+
+#Instalando seclists y más diccionarios 
+
+echo -e "Do you want to install wordlists?"
+read wrds
+
+if [ 'wrds' == 'y' ] then; 
+    
+    sudo su
+    cd /usr/share
+    mkdir wordlists
+    cd wordlists
+    git clone https://github.com/danielmiessler/SecLists.git
+    git clone https://github.com/berzerk0/Probable-Wordlists.git
+    
+fi
+    
+
 
 cd $back
 
