@@ -10,6 +10,15 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
+# Define color variables para ASCII
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 
 cat << "EOF"
 ▄▄▄       ██▀███  ▓█████  ██▓ ▄▄▄       ███▄    █  ██▓  ▄████  ██░ ██ ▄▄▄█████▓
@@ -167,11 +176,16 @@ LOG_FILE="errorAesthetics.data"
 
 for pack in "${packs[@]}"; do
 
-    echo "Installing $pack..."
+    echo -e "Installing $pack..."
     
     yay -S --noconfirm "$pack" >/dev/null 2>&1
     
-    echo "${greenColour}$pack is installed${endColour}"
+    if [ -z "$(command -v $pack)" ]; then
+    
+        echo -e "${greenColour}[!] Something went wrong, $pack is not installed. Try again manually ${endColour}" >> errorAesthetics.data
+    fi
+    
+    echo -e "${greenColour}$pack is installed${endColour}"
     
 done
 
@@ -214,21 +228,19 @@ cd $back
 
 function toolsHack () {
 
-cat << "EOF"
-
-                                                                  
-@@@  @@@   @@@@@@    @@@@@@@  @@@  @@@  @@@  @@@  @@@   @@@@@@@@  
-@@@  @@@  @@@@@@@@  @@@@@@@@  @@@  @@@  @@@  @@@@ @@@  @@@@@@@@@  
-@@!  @@@  @@!  @@@  !@@       @@!  !@@  @@!  @@!@!@@@  !@@        
-!@!  @!@  !@!  @!@  !@!       !@!  @!!  !@!  !@!!@!@!  !@!        
-@!@!@!@!  @!@!@!@!  !@!       @!@@!@!   !!@  @!@ !!@!  !@! @!@!@  
-!!!@!!!!  !!!@!!!!  !!!       !!@!!!    !!!  !@!  !!!  !!! !!@!!  
-!!:  !!!  !!:  !!!  :!!       !!: :!!   !!:  !!:  !!!  :!!   !!:  
-:!:  !:!  :!:  !:!  :!:       :!:  !:!  :!:  :!:  !:!  :!:   !::  
-::   :::  ::   :::   ::: :::   ::  :::   ::   ::   ::   ::: ::::  
- :   : :   :   : :   :: :: :   :   :::  :    ::    :    :: :: :   
-                                                                  
-
+cat << EOF
+${RED}                                                                  
+${GREEN}@@@  @@@   @@@@@@    @@@@@@@  @@@  @@@  @@@  @@@  @@@   @@@@@@@@  
+${BLUE}@@@  @@@  @@@@@@@@  @@@@@@@@  @@@  @@@  @@@  @@@@ @@@  @@@@@@@@@  
+${PURPLE}@@!  @@@  @@!  @@@  !@@       @@!  !@@  @@!  @@!@!@@@  !@@        
+${CYAN}!@!  @!@  !@!  @!@  !@!       !@!  @!!  !@!  !@!!@!@!  !@!        
+${YELLOW}@!@!@!@!  @!@!@!@!  !@!       @!@@!@!   !!@  @!@ !!@!  !@! @!@!@  
+${RED}!!!@!!!!  !!!@!!!!  !!!       !!@!!!    !!!  !@!  !!!  !!! !!@!!  
+${GREEN}!!:  !!!  !!:  !!!  :!!       !!: :!!   !!:  !!:  !!!  :!!   !!:  
+${BLUE}:!:  !:!  :!:  !:!  :!:       :!:  !:!  :!:  :!:  !:!  :!:   !::  
+${PURPLE}::   :::  ::   :::   ::: :::   ::  :::   ::   ::   ::   ::: ::::  
+${CYAN} :   : :   :   : :   :: :: :   :   :::  :    ::    :    :: :: :   
+${NC}                                                                  
 EOF
 
 
@@ -243,7 +255,7 @@ echo 26849980b35a42e6e192c6d9ed8c46f0d6d06047 strap.sh | sha1sum -c >/dev/null 2
 chmod +x strap.sh
 sudo ./strap.sh >/dev/null 2>&1
 
-tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz" "seclists")
+tools=("nmap" "whatweb" "nikto" "go" "gobuster" "feroxbuster" "librewolf" "zen-browser" "burpsuite" "autorecon" "fuff" "netdiscover" "anubis" "arp-scan" "anti-xss" "enum4linux" "exploit-db" "crawley-bin" "wfuzz" "seclists")
 
 LOG_FILE="error.data"
 
@@ -277,15 +289,15 @@ echo -e "Installing nmapAutomator\n"
 echo -e "Do you want to install wordlists?"
 read wrds
 
-if [ 'wrds' == 'y' ] then; 
-    
+if [ "$wrds" == "y" ]; then 
+
     sudo su
     cd /usr/share
     mkdir wordlists
     cd wordlists
     git clone https://github.com/danielmiessler/SecLists.git
     git clone https://github.com/berzerk0/Probable-Wordlists.git
-    
+
 fi
     
 
