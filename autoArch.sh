@@ -112,6 +112,7 @@ if [ "$npah" != "$back" ]; then
 fi
 
 # Instalación de eww
+yay -S gtk3 gtk-layer-shell pango gdk-pixbuf2 libdbusmenu-gtk3 cairo glib2 gcc-libs glibc
 echo -e "${greenColour}\n\n[!]Installing eww${endColour}"
 sleep 3 
 
@@ -193,11 +194,18 @@ done
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 chsh -s $(which zsh)
+yay -S zsh-syntax-highlighting zsh-autosuggestions
 cp .p10k.zsh ~/
+cat .p10k.zsh >> ~/..p10k.zsh 
+echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
 
 # Root Powerlevel10k
-sudo sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
+sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
+sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 chsh -s $(which zsh)
+sudo echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+sudo echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
 
 #Fonts installing 
 
@@ -220,9 +228,9 @@ cp -r backgrounds ${HOME}
 mkdir -p $HOME/.config/fastfetch
 cp -r polybar bin kitty fastfetch ~/.config 
 cp -r backgrounds ~/
-
+cd backgrounds 
+cp picture.png ~/.config/fastfetch
 cd $back
-
 
 }
 
@@ -283,23 +291,16 @@ echo -e "Installing Katana\n"
 sudo git clone https://github.com/21y4d/nmapAutomator >/dev/null 2>&1
 echo -e "Installing nmapAutomator\n"
 
-#Instalando seclists y más diccionarios 
-
-echo -e "Do you want to install wordlists?"
+# Instalando seclists y más diccionarios 
+echo -e "Do you want to install wordlists? (y/n)"
 read wrds
 
 if [ "$wrds" == "y" ]; then 
-
-    sudo su
-    cd /usr/share
-    mkdir wordlists
-    cd wordlists
-    git clone https://github.com/danielmiessler/SecLists.git
-    git clone https://github.com/berzerk0/Probable-Wordlists.git
-
+    sudo mkdir -p /usr/share/wordlists
+    cd /usr/share/wordlists || exit
+    sudo git clone https://github.com/danielmiessler/SecLists.git
+    sudo git clone https://github.com/berzerk0/Probable-Wordlists.git
 fi
-    
-
 
 cd $back
 

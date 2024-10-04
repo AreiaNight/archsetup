@@ -71,10 +71,10 @@ So, I almost forgot this part. This workspace has my *personal* sxhk's version, 
 - [ ] ~~Progress bar to not only show ther "installing..."~~
 - [ ] New eww bar
 - [ ] Personalized installing assistent (paru, yay or pacman) to choose 
-- [ ] Blackarch auto-installer (just in case blackarch install doesn't work)
+- [x] Blackarch auto-installer (just in case blackarch install doesn't work)
 
 ### Fixes to do
-- [ ] Eww not instailling properly 
+- [x] Eww not instailling properly 
 - [x] Seclist not installing in /usr/share
 - [x] Changed focuswrite to ghostwrite 
 - [x] Fixed colors in terminal
