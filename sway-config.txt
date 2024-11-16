@@ -1,0 +1,131 @@
+# Configuración de Sway
+# Basada en la configuración de BSPWM de Areia
+
+# Variables
+set $mod Mod4
+set $left Left
+set $down Down
+set $up Up
+set $right Right
+set $term kitty
+set $menu rofi -show run
+
+# Configuración de salida
+output * bg ~/backgrounds/aphrodite.png fill
+
+# Idle configuration
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 000000' \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f -c 000000'
+
+# Configuración de entrada
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+}
+
+# Espacios de trabajo
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Atajos de teclado básicos
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+Escape reload
+
+# Gestión de ventanas
+bindsym $mod+w kill
+bindsym $mod+m layout toggle split
+bindsym $mod+g focus biggest
+bindsym $mod+Shift+space floating toggle
+
+# Estados de ventana (equivalente a tus estados BSPWM)
+bindsym $mod+t layout tabbed
+bindsym $mod+Shift+t layout stacking
+bindsym $mod+s floating toggle
+bindsym $mod+f fullscreen
+
+# Navegación
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Mover ventanas
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+# Cambiar a espacio de trabajo
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+# Mover ventanas entre espacios
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Resize mode (reemplaza tu script bspwm_resize)
+mode "resize" {
+    bindsym $left resize shrink width 20px
+    bindsym $down resize grow height 20px
+    bindsym $up resize shrink height 20px
+    bindsym $right resize grow width 20px
+
+    # Volver al modo normal
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+alt+$left resize shrink width 20px
+bindsym $mod+alt+$down resize grow height 20px
+bindsym $mod+alt+$up resize shrink height 20px
+bindsym $mod+alt+$right resize grow width 20px
+
+# Tus atajos personalizados
+bindsym $mod+Shift+l exec librewolf
+bindsym $mod+Shift+a exec alacritty
+
+# Configuración de diseño
+default_border pixel 3
+gaps inner 19
+gaps outer 0
+smart_gaps on
+
+# Colores (basados en tu esquema)
+client.focused #4c7899 #285577 #ffffff #2e9ef4 #285577
+client.unfocused #333333 #222222 #888888 #292d2e #222222
+
+# Autostart
+exec_always {
+    'waybar'  # Reemplazo de polybar
+    'mako'    # Notificaciones
+}
+
+# Focus follows mouse
+focus_follows_pointer yes
+
