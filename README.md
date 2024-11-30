@@ -62,15 +62,20 @@ So, I almost forgot this part. This workspace has my *personal* sxhk's version, 
 | Super + Shift + L | Librewolf (if installed) |
 | Super + Shift + A | Alacritty (if installed) |
 
+## NEW THEMES!
 
+<CENTER><H3> APHRODITE HADES </H3></CENTER>
+![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/pic1.jpg?raw=true)
+
+<CENTER><H3> RED LOVE </H3></CENTER>
+![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/pic1.jpg?raw=true)
 
 
 ### COMMING UPDATES - Notes for me
 
 - [ ] Awesome full configuration
-- [ ] ~~Progress bar to not only show ther "installing..."~~
 - [ ] New eww bar
-- [ ] Personalized installing assistent (paru, yay or pacman) to choose 
+- [ ] Personalized installing assistent (paru, yay or pacman) to choose > Script done. Implimentation needed
 - [x] Blackarch auto-installer (just in case blackarch install doesn't work)
 
 ### Fixes to do
