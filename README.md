@@ -65,10 +65,14 @@ So, I almost forgot this part. This workspace has my *personal* sxhk's version, 
 ## NEW THEMES!
 
 <CENTER><H3> APHRODITE HADES </H3></CENTER>
-![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/pic1.jpg?raw=true)
+![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/redlove.png?raw=true)
 
 <CENTER><H3> RED LOVE </H3></CENTER>
-![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/pic1.jpg?raw=true)
+![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/aphrodite.png?raw=true)
+
+### INSTALL
+
+Just copy and paste the dot files and files on their folders. Be sure to make a copy of your current files in case. 
 
 
 ### COMMING UPDATES - Notes for me
