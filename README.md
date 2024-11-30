@@ -64,11 +64,11 @@ So, I almost forgot this part. This workspace has my *personal* sxhk's version, 
 
 ## NEW THEMES!
 
-### APHRODITE HADES
+### RED LOVE
 ![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/redlove.png?raw=true)
 
 
-### RED LOVE
+### APHRODITE HADES
 ![ ](https://github.com/AreiaNight/archsetup/blob/main/screnshots/aphrodite.png?raw=true)
 
 ### INSTALL
