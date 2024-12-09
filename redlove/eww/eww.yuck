@@ -1,0 +1,24 @@
+(defvar eww "$HOME/.local/bin/eww -c $HOME/.config/eww/bar")
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      WORKSPACES      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwidget workspaces []
+  (literal :content workspaces))
+(deflisten workspaces "scripts/workspaces")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;       BAR MAIN       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwindow bar ;; definimos le nombre del widget, en este caso bar
+      :monitor 0 ;; definimos el monitor en el que se quiera mostrar, en este caso 0
+      :windowtype "dock" ;; tipo de window, en este caso dock
+      :geometry (geometry :x "0%" ;; Posicion en el eje X. 
+                          :y "0.7%" ;; Posicion en el eje y. 
+                          :width "90%" ;; ancho
+                          :height "30px" ;; alto
+                          :anchor "top center") ;; anclaje
+      :reserve (struts :side "top" :distance "4%") ;; separacion del widget con el resto de
+                                                   ;; ventanas
+  (workspaces)) ;;Aqui se ponen las cosas que van en el interior de la bar

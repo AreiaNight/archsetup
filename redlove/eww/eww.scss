@@ -1,0 +1,46 @@
+// Global
+*{
+  all: unset;
+}
+
+// Variable Color's
+$lust: #20101F;
+$golden: #FFD97A;
+$redlover: #BF2F28;
+$redsweet: #8B313A;
+$purplelover: #A56CC5;
+$purpleloverA: #2A0F22;
+$purpledeep: #1B0F22;
+
+.bar {
+  background: $purpleloverA; 
+  color: $golden;
+  font-size: 15px;
+}
+
+// Workspaces Styles
+.workspaces {
+  margin-top: 6.5px;
+
+  button {
+    margin: 0 2px;
+    padding: 0 10px;
+    color: $golden; // Default text color
+    background: transparent; // Keep background transparent
+    border-radius: 4px; // Optional: rounded corners
+
+    &.occupied {
+      color: $redsweet; // Text color for occupied
+      border: 1px solid $redsweet; // Optional: border color
+    }
+
+    &.focused {
+      color: $purplelover; // Text color for focused
+      border: 1px solid $purplelover; // Optional: border color
+    }
+
+    &:hover {
+      color: $redlover; // Change text color on hover
+    }
+  }
+}
