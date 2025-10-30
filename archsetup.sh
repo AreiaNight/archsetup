@@ -222,8 +222,8 @@ sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlev
 sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 chsh -s $(which zsh)
 yay -S zsh-syntax-highlighting zsh-autosuggestions
-cp .p10k.zsh ~/
-cat .p10k.zsh >> ~/..p10k.zsh 
+sudo cp .p10k.zsh ~/
+sudo cat .p10k.zsh >> ~/..p10k.zsh 
 echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
 echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
 
