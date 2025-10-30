@@ -175,7 +175,7 @@ echo -e "${purpleColour}\n\nInstalling picom!${endColour}"
 #Dependencias
 yay -S --noconfirm picom >/dev/null 2>&1
 sudo pacman -S cmake
-sudo pacman -S cc
+yay -S cc
 sudo pacman -S meson
 sudo pacman -S uthash
 sudo pacman -S libev
