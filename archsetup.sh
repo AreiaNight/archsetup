@@ -172,11 +172,19 @@ fi
 
 echo -e "${purpleColour}\n\nInstalling picom!${endColour}"
 
+#Dependencias
 yay -S --noconfirm picom >/dev/null 2>&1
-git clone https://github.com/Arian8j2/picom-jonaburg-fix.git
-cd picom-jonaburg-fix
-meson --buildtype=release . build >/dev/null 2>&1
-ninja -C --noconfirm build >/dev/null 2>&1
+sudo pacman -S cmake
+sudo pacman -S cc
+sudo pacman -S meson
+sudo pacman -S uthash
+sudo pacman -S libev
+
+git clone https://github.com/jonaburg/picom
+cd picom
+meson --buildtype=release . build
+ninja -C build
+sudo ninja -C build install
 LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson --buildtype=release . build >/dev/null 2>&1
 # To install the binaries in /usr/local/bin (optional)
 sudo ninja -C --noconfirm build install >/dev/null 2>&1
