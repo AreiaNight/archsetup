@@ -186,7 +186,7 @@ sudo ninja -C build install >/dev/null 2>&1
 
 # Crear directorio de configuración
 mkdir -p $HOME/.config/picom
-cp picom.confi $HOME/.config/picom
+cp picom.conf $HOME/.config/picom/
 
 # Volver al directorio original
 cd "$back"
