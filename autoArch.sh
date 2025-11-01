@@ -130,30 +130,6 @@ if [ "$npah" != "$back" ]; then
     cd "$back"
 fi
 
-# Instalación de eww
-yay -S gtk3 gtk-layer-shell pango gdk-pixbuf2 libdbusmenu-gtk3 cairo glib2 gcc-libs glibc
-echo -e "${greenColour}\n\n[!]Installing eww${endColour}"
-sleep 3 
-
-yay -S --noconfirm rust cargo
-git clone https://github.com/elkowar/eww > /dev/null 2>&1
-cd eww
-
-echo -e "${purpleColour}\n\nAre you using Wayland? (y/n)${endColour}"
-read replay
-
-case $replay in
-    y)
-        waylandEww
-        ;;
-    n)
-        normalEww
-        ;;
-    *)
-        echo -e "${redColour}\nNon an option, sorry! Exiting!${endColour}"
-        exit 1
-        ;;
-esac
 
 npah=$(pwd)
 if [ "$npah" != "$back" ]; then
@@ -168,25 +144,87 @@ if [ -z "$(command -v kitty)" ]; then
 fi
 
 
-#Installing picom
-
+# Installing picom
 echo -e "${purpleColour}\n\nInstalling picom!${endColour}"
 
-yay -S --noconfirm picom >/dev/null 2>&1
-git clone https://github.com/Arian8j2/picom-jonaburg-fix.git
-cd picom-jonaburg-fix
-meson --buildtype=release . build >/dev/null 2>&1
-ninja -C --noconfirm build >/dev/null 2>&1
-LDFLAGS="-L/path/to/libraries" CPPFLAGS="-I/path/to/headers" meson --buildtype=release . build >/dev/null 2>&1
-# To install the binaries in /usr/local/bin (optional)
-sudo ninja -C --noconfirm build install >/dev/null 2>&1
-mkdir -p $HOME/.config/picom
-cd $back
-cp picom.conf ~/.config/picom
-
-if [ "$npah" != "$back" ]; then
-    cd "$back"
+# Detectar si es máquina virtual
+if systemd-detect-virt -q 2>/dev/null; then
+    VM_TYPE=$(systemd-detect-virt)
+    echo -e "${yellowColour}Detected virtual machine: $VM_TYPE${endColour}"
+    IS_VM=true
+else
+    IS_VM=false
 fi
+
+# Instalar dependencias necesarias primero
+yay -S --noconfirm meson ninja gcc cmake libxext libxcb xcb-util-renderutil xcb-util-image xcb-util-glx >/dev/null 2>&1
+
+# Instalar picom base desde repositorio
+yay -S --noconfirm picom >/dev/null 2>&1
+
+# Clonar y compilar picom-jonaburg con animaciones
+git clone https://github.com/jonaburg/picom.git picom-jonaburg >/dev/null 2>&1
+cd picom-jonaburg
+git submodule update --init >/dev/null 2>&1
+
+# Compilar correctamente
+meson setup --buildtype=release build >/dev/null 2>&1
+ninja -C build >/dev/null 2>&1
+sudo ninja -C build install >/dev/null 2>&1
+
+# Crear directorio de configuración
+mkdir -p $HOME/.config/picom
+cp picom.confi $HOME/.config/picom
+
+# Volver al directorio original
+cd "$back"
+
+# Configuración basada en el tipo de sistema
+if [ "$IS_VM" = true ]; then
+    echo -e "${yellowColour}Creating VM-optimized picom configuration...${endColour}"
+    cat > ~/.config/picom/picom.conf << 'EOF'
+# VM-optimized picom configuration
+backend = "xrender"
+vsync = true
+use-damage = false
+
+# Deshabilitar características pesadas para VM
+animations = false
+shadow = false
+fading = false
+blur: { method = "none"; }
+corner-radius = 0
+
+# Configuración de rendimiento para VM
+glx-no-stencil = true
+glx-no-rebind-pixmap = true
+xrender-sync-fence = true
+
+# Excluir todo problemático en VM
+shadow-exclude = [ "all" ]
+fade-exclude = [ "all" ]
+blur-background-exclude = [ "all" ]
+focus-exclude = [ "all" ]
+
+# Opacidad básica
+inactive-opacity = 1.0
+active-opacity = 1.0
+frame-opacity = 1.0
+
+# Detección
+detect-rounded-corners = false
+detect-client-opacity = true
+
+# Log level
+log-level = "warn"
+EOF
+else
+    echo -e "${greenColour}Creating standard picom configuration with animations...${endColour}"
+    cp picom.conf ~/.config/picom/
+fi
+
+echo -e "${greenColour}Picom installed successfully!${endColour}"
+echo -e "${blueColour}Configuration: ${endColour}$([ "$IS_VM" = true ] && echo "VM-optimized" || echo "Full features")"
 
 
 # Instalación de herramientas adicionales
@@ -210,30 +248,26 @@ for pack in "${packs[@]}"; do
 done
 
 # Instalación de Powerlevel10k
-sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-chsh -s $(which zsh)
-yay -S zsh-syntax-highlighting zsh-autosuggestions
-cp .p10k.zsh ~/
-cat .p10k.zsh >> ~/..p10k.zsh 
-echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+echo -e "${greenColour}/n[!]Installing powerlevel10k for user ${endColour}" 
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+yay -S --noconfirm zsh-syntax-highlighting zsh-autosuggestions
+echo "source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
 echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
+chsh -s $(which zsh)
 
 # Root Powerlevel10k
-sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root
-sudo echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-chsh -s $(which zsh)
-sudo echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
-sudo echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
+echo -e "${greenColour}/n[!]Installing powerlevel10k for root ${endColour}" 
+sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k
+sudo sh -c 'echo "source /root/powerlevel10k/powerlevel10k.zsh-theme" >> /root/.zshrc'
+sudo sh -c 'echo "source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> /root/.zshrc'
+sudo sh -c 'echo "source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> /root/.zshrc'
+echo "Cambiando shell de root a zsh..."
+sudo chsh -s $(which zsh) root
 
 #Fonts installing 
 
-fonts=("ttf-space-mono-nerd" "ttf-monofur-nerd" "ttf-anonymouspro-nerd" "ttf-nerd-fonts-symbols-mono")
-
-for font in "${fonts[@]}"; do
-    yay -S --noconfirm $font >/dev/null 2>&1
-    echo "Instalando $font"
-done
+pacman -S nerd-fonts
 
 cd polybar 
 chmod +x launch.sh
@@ -401,52 +435,6 @@ cd $back
 
 
 }
-
-function waylandEww(){
-
-    echo -e "${blueColour}\n\nBuilding eww! This will take sometime tho, want to go and walk a bit?${endColour}"
-    cargo build --release --no-default-features --features=wayland >/dev/null 2>&1
-    cd target/release
-    chmod +x eww
-    echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
-    sleep 3
-    cd $back
-    
-
-    
-}
-
-function normalEww(){
-    
-    
-    echo -e "${blueColour}\n\nBuilding eww! This will take sometime tho, want to go and walk a bit?${endColour}"
-    cargo build --release --no-default-features --features x11 >/dev/null 2>&1
-    cd target/release
-    chmod +x eww
-    echo -e "${greenColour}\n\nDone installing Eww!${endColour}"
-    sleep 3
-    cd $back
-   
-
-}
-
-
-case $replay in
-    1)
-        aesthetics
-        toolsHack
-        ;;
-    2)
-        toolsHack
-        aesthetics
-        ;;
-    *)
-        echo -e "${redColour}\nNon an option, sorry! Exiting!${endColour}"
-        exit 1
-        ;;
-esac 
-
-echo -e "${greenColour}Done!${endColour}"
 
 
 
